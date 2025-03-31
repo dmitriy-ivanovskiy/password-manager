@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Vault - Password Manager{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Password Manager</h1>
+    <div class="auth-form">
+        <h2>Create New Vault</h2>
+        
+        <div class="info-box">
+            <p><strong>Important:</strong> Your master password is the key to all your passwords. Make sure it's:</p>
+            <ul>
+                <li>Strong and unique</li>
+                <li>Something you can remember</li>
+                <li>Not used anywhere else</li>
+            </ul>
+            <p><strong>Warning:</strong> If you forget your master password, you may lose access to all your stored passwords. There is no password reset option.</p>
+        </div>
+        
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
+        <form method="POST" action="{{ url_for('auth.create_vault') }}">
+            {{ form.csrf_token }}
+            
+            <div class="form-group">
+                {{ form.master_password.label }}
+                {{ form.master_password(class="form-control", autofocus=true, onkeyup="checkPasswordStrength(this.value)") }}
+                {% if form.master_password.errors %}
+                    <div class="error-message">
+                        {% for error in form.master_password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <div class="password-strength-container">
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strength-fill"></div>
+                        </div>
+                        <div class="strength-text" id="strength-text">Password strength</div>
+                    </div>
+                    <div class="strength-requirements">
+                        <p>Your master password should have:</p>
+                        <ul>
+                            <li id="length-check" class="requirement">At least 12 characters <span class="check-status"></span></li>
+                            <li id="uppercase-check" class="requirement">At least one uppercase letter <span class="check-status"></span></li>
+                            <li id="lowercase-check" class="requirement">At least one lowercase letter <span class="check-status"></span></li>
+                            <li id="number-check" class="requirement">At least one number <span class="check-status"></span></li>
+                            <li id="symbol-check" class="requirement">At least one special character <span class="check-status"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <small>This password will be used to encrypt your vault. Make it strong and memorable.</small>
+            </div>
+            
+            <div class="form-group">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="form-control") }}
+                {% if form.confirm_password.errors %}
+                    <div class="error-message">
+                        {% for error in form.confirm_password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Create Vault</button>
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <a href="{{ url_for('auth.login') }}">Back to Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function checkPasswordStrength(password) {
+        // Initialize criteria checks
+        let lengthValid = password.length >= 12;
+        let uppercaseValid = /[A-Z]/.test(password);
+        let lowercaseValid = /[a-z]/.test(password);
+        let numberValid = /[0-9]/.test(password);
+        let symbolValid = /[^A-Za-z0-9]/.test(password);
+        
+        // Update check marks
+        updateRequirement('length-check', lengthValid);
+        updateRequirement('uppercase-check', uppercaseValid);
+        updateRequirement('lowercase-check', lowercaseValid);
+        updateRequirement('number-check', numberValid);
+        updateRequirement('symbol-check', symbolValid);
+        
+        // Calculate overall strength (0-4)
+        let strength = [lengthValid, uppercaseValid, lowercaseValid, numberValid, symbolValid].filter(Boolean).length;
+        
+        // Update strength meter
+        const strengthFill = document.getElementById('strength-fill');
+        const strengthText = document.getElementById('strength-text');
+        
+        // Set width based on strength
+        const percent = (strength / 5) * 100;
+        strengthFill.style.width = `${percent}%`;
+        
+        // Set color and text based on strength
+        if (strength === 0) {
+            strengthFill.className = 'strength-fill very-weak';
+            strengthText.textContent = 'Very Weak';
+        } else if (strength === 1) {
+            strengthFill.className = 'strength-fill weak';
+            strengthText.textContent = 'Weak';
+        } else if (strength === 2) {
+            strengthFill.className = 'strength-fill fair';
+            strengthText.textContent = 'Fair';
+        } else if (strength === 3) {
+            strengthFill.className = 'strength-fill good';
+            strengthText.textContent = 'Good';
+        } else if (strength === 4) {
+            strengthFill.className = 'strength-fill strong';
+            strengthText.textContent = 'Strong';
+        } else {
+            strengthFill.className = 'strength-fill very-strong';
+            strengthText.textContent = 'Very Strong';
+        }
+    }
+    
+    function updateRequirement(id, isValid) {
+        const element = document.getElementById(id);
+        const statusEl = element.querySelector('.check-status');
+        
+        if (isValid) {
+            element.classList.add('valid');
+            element.classList.remove('invalid');
+            statusEl.textContent = '✓';
+        } else {
+            element.classList.add('invalid');
+            element.classList.remove('valid');
+            statusEl.textContent = '✗';
+        }
+    }
+</script>
+{% endblock %} 

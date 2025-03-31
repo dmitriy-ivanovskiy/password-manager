@@ -1,0 +1,91 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+env/
+venv/
+.venv/
+ENV/
+
+# Testing and Coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Environment Files
+.env
+.env.*
+!.env.template
+!.env.docker
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Compiled Assets
+static/css/
+*.css.map
+*.sass.map
+*.scss.map
+.sass-cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Application Specific
+*.db
+*.sqlite
+*.sqlite3
+instance/*
+!instance/.gitkeep
+logs/*
+!logs/.gitkeep
+flask_session/
+temp/
+uploads/
+config.json
+
+# Backup Files
+*.bak
+*.backup
+*~
+
+docs/

@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Password Manager{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Your Password Vault</h1>
+        <div class="dashboard-header-actions">
+            <a href="{{ url_for('auth.logout') }}" class="btn danger">Logout</a>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('passwords.add_password') }}" class="btn primary">
+            <span class="icon">+</span> Add New Password
+        </a>
+        <a href="{{ url_for('passwords.generate_password_page') }}" class="btn secondary">
+            <span class="icon">⚙️</span> Generate Password
+        </a>
+        <a href="{{ url_for('auth.export_vault') }}" class="btn tertiary">
+            <span class="icon">📦</span> Backup Vault
+        </a>
+    </div>
+
+    <div class="dashboard-filters">
+        <form method="GET" action="{{ url_for('passwords.dashboard') }}" class="search-form">
+            <div class="search-input">
+                <input type="text" name="search" placeholder="Search by site or username..." value="{{ search_query }}">
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="category">Category:</label>
+                    <select name="category" id="category" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}" {% if category_filter == category %}selected{% endif %}>
+                                {{ category }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="sort_by">Sort by:</label>
+                    <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+                        <option value="site" {% if sort_by == 'site' %}selected{% endif %}>Site</option>
+                        <option value="username" {% if sort_by == 'username' %}selected{% endif %}>Username</option>
+                        <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Date Added</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="sort_order">Order:</label>
+                    <select name="sort_order" id="sort_order" onchange="this.form.submit()">
+                        <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
+                        <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+    <div class="password-list">
+        {% if passwords %}
+            <div class="password-entries">
+                {% for entry in passwords %}
+                <div class="password-card">
+                    <div class="card-header">
+                        <h3 class="site-name">{{ entry.site }}</h3>
+                        {% if entry.category %}
+                        <span class="category-tag">{{ entry.category }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="username">
+                            <span>Username:</span> {{ entry.username }}
+                        </div>
+                        
+                        <div class="password-field">
+                            <div class="password-display" id="password-{{ entry.id }}">••••••••</div>
+                            <div class="password-actions">
+                                <button onclick="togglePassword('{{ entry.id }}', '{{ entry.decrypted_password }}')" title="Show/Hide Password">
+                                    <span id="toggle-icon-{{ entry.id }}">👁️</span>
+                                </button>
+                                <button onclick="copyToClipboard('{{ entry.decrypted_password }}')" title="Copy Password">
+                                    📋
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="timestamp">
+                            {% if entry.created_at and not entry.created_at is string %}
+                                Added: {{ entry.created_at.strftime('%Y-%m-%d') }}
+                            {% elif entry.created_at %}
+                                Added: {{ entry.created_at }}
+                            {% endif %}
+                        </div>
+                        <div class="entry-actions">
+                            <a href="{{ url_for('passwords.edit_password', id=entry.id) }}" title="Edit">
+                                ✏️
+                            </a>
+                            <button onclick="confirmDelete('{{ entry.id }}', '{{ entry.site }}')" class="delete-btn" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No passwords saved yet.</h3>
+                <p>Use the "Add New Password" button at the top to create your first entry.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete the password for <span id="delete-site-name"></span>?</p>
+        <p class="warning-text">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <form id="delete-form" method="POST" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn danger">Delete</button>
+                <button type="button" class="btn cancel" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePassword(id, password) {
+        const passwordElement = document.getElementById(`password-${id}`);
+        const toggleIcon = document.getElementById(`toggle-icon-${id}`);
+        
+        if (passwordElement.textContent === '••••••••') {
+            passwordElement.textContent = password;
+            passwordElement.classList.add('password-visible');
+            toggleIcon.textContent = '🔒';
+        } else {
+            passwordElement.textContent = '••••••••';
+            passwordElement.classList.remove('password-visible');
+            toggleIcon.textContent = '👁️';
+        }
+    }
+    
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            // Show a temporary notification
+            showNotification('Password copied to clipboard');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+    
+    function showNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        
+        // Add to the DOM
+        document.body.appendChild(notification);
+        
+        // Show with animation
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        // Remove after delay
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 2000);
+    }
+    
+    function confirmDelete(id, siteName) {
+        // Update the modal
+        document.getElementById('delete-site-name').textContent = siteName;
+        document.getElementById('delete-form').action = `/delete-password/${id}`;
+        
+        // Show the modal
+        document.getElementById('delete-modal').classList.add('show');
+    }
+    
+    function closeModal() {
+        document.getElementById('delete-modal').classList.remove('show');
+    }
+    
+    // Close modal if clicked outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('delete-modal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+    
+    // Settings dropdown
+    const settingsDropdown = document.querySelector('.settings-dropdown');
+    if (settingsDropdown) {
+        const toggleBtn = settingsDropdown.querySelector('.dropdown-toggle');
+        const menu = settingsDropdown.querySelector('.dropdown-menu');
+        
+        toggleBtn.addEventListener('click', function() {
+            menu.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!settingsDropdown.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    }
+</script>
+{% endblock %} 

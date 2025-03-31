@@ -1,0 +1,26 @@
+// Import variables first
+@import 'variables';
+
+// Base styles 
+@import 'base';
+
+// Layout components
+@import 'layout';
+
+// Component styles
+@import 'components';
+
+// Auth-related styles
+@import 'auth';
+
+// Dashboard styles
+@import 'dashboard';
+
+// Form styles
+@import 'forms';
+
+// Password styles
+@import 'passwords';
+
+// Utilities
+@import 'utilities'; 

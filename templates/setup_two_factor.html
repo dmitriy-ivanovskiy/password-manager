@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Setup Two-Factor Authentication - Password Manager{% endblock %}
+
+{% block content %}
+<div class="two-factor-container">
+    <h2>Setup Two-Factor Authentication</h2>
+    
+    <div class="setup-instructions">
+        <p>Setting up two-factor authentication adds an extra layer of security to your account. Follow these steps:</p>
+        
+        <ol>
+            <li>Install an authenticator app on your mobile device (Google Authenticator, Authy, Microsoft Authenticator, etc.)</li>
+            <li>Scan the QR code below with your authenticator app</li>
+            <li>If you can't scan the QR code, enter the secret key manually in your app</li>
+            <li>Enter the 6-digit code displayed in your app to verify setup</li>
+        </ol>
+    </div>
+    
+    <div class="qr-code-container">
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+    </div>
+    
+    <p>Secret Key (if you can't scan the QR code):</p>
+    <div class="secret-key">{{ secret }}</div>
+    
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST" action="{{ url_for('auth.setup_two_factor') }}">
+        {{ form.csrf_token }}
+        
+        <div class="form-group">
+            {{ form.code.label }}
+            {{ form.code(class="form-control", autofocus=true, inputmode="numeric", pattern="[0-9]*") }}
+            {% if form.code.errors %}
+                <div class="error-message">
+                    {% for error in form.code.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn primary">Verify and Enable</button>
+            <a href="{{ url_for('passwords.dashboard') }}" class="btn secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

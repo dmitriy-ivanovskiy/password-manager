@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Rate Limit Exceeded - Password Manager{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Password Manager</h1>
+    <div class="error-container">
+        <h2>Rate Limit Exceeded</h2>
+        
+        <div class="warning-box">
+            <p><strong>For your security, we limit the number of login attempts.</strong></p>
+            <p>You have made too many login attempts in a short period of time. This limit helps protect your account from brute force attacks.</p>
+        </div>
+        
+        <div class="countdown-container">
+            <p>You can try again in <span id="countdown">{{ retry_after }}</span> seconds.</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="error-actions">
+            <a href="{{ url_for('auth.login') }}" class="btn secondary" id="retry-btn" disabled>Try Again</a>
+        </div>
+        
+        <div class="reset-vault-section">
+            <p class="reset-warning">Can't remember your master password?</p>
+            <button type="button" class="btn danger" id="resetVaultButton">Reset Vault</button>
+            <div id="resetConfirmation" class="hidden">
+                <p class="reset-warning"><strong>Warning:</strong> Resetting your vault will permanently delete all stored passwords. This action cannot be undone.</p>
+                <form method="POST" action="{{ url_for('auth.reset_vault') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn danger">Confirm Reset</button>
+                    <button type="button" class="btn" id="cancelReset">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up countdown timer
+        let secondsLeft = {{ retry_after }};
+        const countdownElement = document.getElementById('countdown');
+        const progressFill = document.getElementById('progress-fill');
+        const retryBtn = document.getElementById('retry-btn');
+        const totalTime = {{ retry_after }};
+        
+        // Update countdown every second
+        const countdownInterval = setInterval(function() {
+            secondsLeft -= 1;
+            countdownElement.textContent = secondsLeft;
+            
+            // Update progress bar
+            const percentComplete = 100 - ((secondsLeft / totalTime) * 100);
+            progressFill.style.width = percentComplete + '%';
+            
+            // Enable retry button when countdown finishes
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                retryBtn.removeAttribute('disabled');
+                retryBtn.classList.remove('secondary');
+                retryBtn.classList.add('primary');
+                countdownElement.textContent = '0';
+            }
+        }, 1000);
+        
+        // Reset vault confirmation
+        const resetButton = document.getElementById('resetVaultButton');
+        const resetConfirmation = document.getElementById('resetConfirmation');
+        const cancelButton = document.getElementById('cancelReset');
+        
+        resetButton.addEventListener('click', function() {
+            resetButton.classList.add('hidden');
+            resetConfirmation.classList.remove('hidden');
+        });
+        
+        cancelButton.addEventListener('click', function() {
+            resetConfirmation.classList.add('hidden');
+            resetButton.classList.remove('hidden');
+        });
+    });
+</script>
+{% endblock %} 

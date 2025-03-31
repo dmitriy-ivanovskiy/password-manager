@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete - Password Manager{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <a href="{{ url_for('passwords.dashboard') }}" class="back-link">Back to Dashboard</a>
+
+    <div class="form-card danger-card">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete the password for <strong>{{ password.site }}</strong>?</p>
+        <p class="warning-text">This action cannot be undone.</p>
+        
+        <div class="form-actions">
+            <form method="POST" action="{{ url_for('passwords.delete_password', id=password.id) }}">
+                <button type="submit" class="btn danger">Delete</button>
+                <a href="{{ url_for('passwords.dashboard') }}" class="btn secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

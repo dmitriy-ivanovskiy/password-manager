@@ -1,0 +1,25 @@
+Flask==2.2.5
+Flask-Session==0.8.0
+Flask-WTF==1.2.2
+Flask-Talisman==1.1.0
+Flask-Limiter==3.12
+# SECURITY NOTICE: Werkzeug 2.2.3 has known vulnerabilities but is the version compatible with Flask 2.2.5 and Flask-WTF 1.2.2
+# To fix these security issues, the entire Flask stack should be upgraded in a future release
+Werkzeug==2.2.3
+
+cryptography==44.0.2
+bcrypt==4.3.0
+zxcvbn==4.5.0
+pyotp==2.9.0
+qrcode==8.0
+# Use a version of Pillow that's compatible with Python 3.13
+Pillow==11.0.0
+
+SQLAlchemy==2.0.39
+
+python-dotenv==1.1.0
+WTForms==3.2.1
+validators==0.28.1
+
+# WSGI server
+gunicorn==23.0.0 

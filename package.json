@@ -1,0 +1,26 @@
+{
+  "name": "passwordmanager",
+  "version": "1.0.0",
+  "description": "A web-based password manager designed to securely store, retrieve, and manage user passwords. It uses AES-256 encryption for data security and a master password for access.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "bash scripts/test.sh",
+    "test:coverage": "bash scripts/test.sh --coverage",
+    "test:security": "bash scripts/test.sh --security",
+    "sass": "sass static/scss/main.scss static/css/style.css --style compressed",
+    "sass:watch": "sass static/scss/main.scss static/css/style.css --watch",
+    "lint": "bash scripts/test.sh --lint",
+    "build": "npm run sass && npm run test",
+    "dev": "npm run sass:watch"
+  },
+  "keywords": ["password", "security", "encryption", "flask", "web-app"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.72.0"
+  }
+}

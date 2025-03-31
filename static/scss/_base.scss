@@ -1,0 +1,131 @@
+/* Base styles and resets */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $gray-800;
+  background-color: $light-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: $spacer;
+  color: $gray-900;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-bottom: $spacer;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  
+  &:hover {
+    color: darken($primary-color, 10%);
+    text-decoration: underline;
+  }
+}
+
+// Flash message styling
+.flash-messages {
+  margin-bottom: $spacer;
+}
+
+.flash-message {
+  padding: $spacer;
+  border-radius: $border-radius;
+  margin-bottom: $spacer * 0.5;
+  
+  &.success {
+    background-color: lighten($success-color, 45%);
+    border: 1px solid $success-color;
+    color: darken($success-color, 10%);
+  }
+  
+  &.error {
+    background-color: lighten($danger-color, 40%);
+    border: 1px solid $danger-color;
+    color: darken($danger-color, 10%);
+  }
+  
+  &.warning {
+    background-color: lighten($warning-color, 40%);
+    border: 1px solid $warning-color;
+    color: darken($warning-color, 30%);
+  }
+  
+  &.info {
+    background-color: lighten($info-color, 45%);
+    border: 1px solid $info-color;
+    color: darken($info-color, 10%);
+  }
+}
+
+// Tables
+table {
+  width: 100%;
+  margin-bottom: $spacer;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: $spacer * 0.75;
+    vertical-align: top;
+    border-top: $border-width solid $border-color;
+  }
+  
+  th {
+    vertical-align: bottom;
+    border-bottom: 2 * $border-width solid $border-color;
+    background-color: $gray-100;
+    font-weight: $font-weight-bold;
+    text-align: left;
+  }
+  
+  tbody tr:nth-of-type(odd) {
+    background-color: rgba($gray-200, 0.3);
+  }
+  
+  tbody tr:hover {
+    background-color: rgba($gray-200, 0.5);
+  }
+} 

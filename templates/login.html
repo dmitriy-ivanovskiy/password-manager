@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Password Manager{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Password Manager</h1>
+    <h2>Login</h2>
+    
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST" action="{{ url_for('auth.login') }}">
+        {{ form.csrf_token }}
+        
+        <div class="form-group">
+            {{ form.master_password.label }}
+            {{ form.master_password(class="form-control", autofocus=true, placeholder="Enter your master password") }}
+            {% if form.master_password.errors %}
+                <div class="error-message">
+                    {% for error in form.master_password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn primary">Login</button>
+        </div>
+    </form>
+    
+    <div class="auth-links">
+        <a href="{{ url_for('auth.create_vault') }}">Create New Vault</a>
+    </div>
+    
+    <div class="reset-vault-section">
+        <button type="button" class="btn danger" id="resetVaultButton">Reset Vault</button>
+        
+        <div id="resetConfirmation" class="reset-confirmation" style="display: none;">
+            <div class="reset-message">Warning</div>
+            <div class="reset-warning">Resetting your vault will permanently delete all stored passwords. This action cannot be undone.</div>
+            
+            <div class="confirm-actions">
+                <form method="POST" action="{{ url_for('auth.reset_vault') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn danger">Confirm Reset</button>
+                </form>
+                <button type="button" class="btn secondary" id="cancelReset">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetButton = document.getElementById('resetVaultButton');
+        const resetConfirmation = document.getElementById('resetConfirmation');
+        const cancelButton = document.getElementById('cancelReset');
+        
+        resetButton.addEventListener('click', function() {
+            resetButton.style.display = 'none';
+            resetConfirmation.style.display = 'block';
+        });
+        
+        cancelButton.addEventListener('click', function() {
+            resetConfirmation.style.display = 'none';
+            resetButton.style.display = 'block';
+        });
+        
+        // Optional: Hide "session expired" flash message when coming from reset
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('from_reset')) {
+            document.querySelectorAll('.flash-message.warning').forEach(function(el) {
+                if (el.textContent.trim().includes('session has expired')) {
+                    el.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %} 

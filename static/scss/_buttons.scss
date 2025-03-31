@@ -1,0 +1,221 @@
+/* Button styles */
+
+.btn {
+  display: inline-block;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  color: $gray-700;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: $border-width solid transparent;
+  padding: $spacer * 0.5 $spacer;
+  font-size: $font-size-base;
+  border-radius: $border-radius;
+  transition: color 0.15s ease-in-out,
+              background-color 0.15s ease-in-out,
+              border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+  
+  &:hover {
+    text-decoration: none;
+  }
+  
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+  
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.65;
+  }
+}
+
+// Button variants
+.primary {
+  color: white;
+  background-color: $primary-color;
+  border-color: $primary-color;
+  
+  &:hover {
+    color: white;
+    background-color: darken($primary-color, 7.5%);
+    border-color: darken($primary-color, 10%);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.5);
+  }
+}
+
+.secondary {
+  color: white;
+  background-color: $secondary-color;
+  border-color: $secondary-color;
+  
+  &:hover {
+    color: white;
+    background-color: darken($secondary-color, 7.5%);
+    border-color: darken($secondary-color, 10%);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($secondary-color, 0.5);
+  }
+}
+
+.success {
+  color: white;
+  background-color: $success-color;
+  border-color: $success-color;
+  
+  &:hover {
+    color: white;
+    background-color: darken($success-color, 7.5%);
+    border-color: darken($success-color, 10%);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($success-color, 0.5);
+  }
+}
+
+.danger {
+  color: white;
+  background-color: $danger-color;
+  border-color: $danger-color;
+  
+  &:hover {
+    color: white;
+    background-color: darken($danger-color, 7.5%);
+    border-color: darken($danger-color, 10%);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($danger-color, 0.5);
+  }
+}
+
+.outline {
+  background-color: transparent;
+  
+  &.primary {
+    color: $primary-color;
+    border-color: $primary-color;
+    
+    &:hover {
+      color: white;
+      background-color: $primary-color;
+    }
+  }
+  
+  &.secondary {
+    color: $secondary-color;
+    border-color: $secondary-color;
+    
+    &:hover {
+      color: white;
+      background-color: $secondary-color;
+    }
+  }
+}
+
+// Button sizes
+.small {
+  padding: $spacer * 0.25 $spacer * 0.5;
+  font-size: 0.875rem;
+  border-radius: $border-radius-sm;
+}
+
+.large {
+  padding: $spacer * 0.75 $spacer * 1.5;
+  font-size: 1.25rem;
+  border-radius: $border-radius-lg;
+}
+
+// Action buttons
+.action-button {
+  margin-right: $spacer * 0.5;
+  margin-bottom: $spacer * 0.5;
+}
+
+.btn-action {
+  padding: $spacer * 0.25 $spacer * 0.5;
+  font-size: 0.8rem;
+}
+
+// Button groups
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer * 0.5;
+}
+
+// Dropdown
+.dropdown {
+  position: relative;
+  display: inline-block;
+  
+  .dropdown-toggle {
+    position: relative;
+    padding-right: $spacer * 1.5;
+    
+    &::after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      right: $spacer * 0.75;
+      top: 50%;
+      transform: translateY(-25%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid currentColor;
+    }
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    z-index: $z-index-dropdown;
+    min-width: 10rem;
+    padding: $spacer * 0.5 0;
+    margin: $spacer * 0.125 0 0;
+    background-color: white;
+    border: $border-width solid $gray-300;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow-sm;
+  }
+  
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: $spacer * 0.25 $spacer;
+    clear: both;
+    font-weight: $font-weight-normal;
+    color: $gray-900;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    
+    &:hover,
+    &:focus {
+      color: $gray-900;
+      text-decoration: none;
+      background-color: $gray-100;
+    }
+  }
+  
+  &:hover .dropdown-content {
+    display: block;
+  }
+} 

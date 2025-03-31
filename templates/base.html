@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Password Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Secure Password Manager</h1>
+        </header>
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            <p>&copy; {{ now.year if now else 2025 }} Password Manager</p>
+        </footer>
+    </div>
+    <script>
+        // CSRF token for AJAX requests
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Helper for AJAX requests with CSRF token
+        async function fetchWithCSRF(url, options = {}) {
+            const headers = {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            };
+            
+            return fetch(url, {
+                ...options,
+                headers
+            });
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

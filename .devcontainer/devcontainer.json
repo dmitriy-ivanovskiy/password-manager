@@ -1,0 +1,17 @@
+{
+    "name": "Password Manager Dev",
+    "dockerFile": "../Dockerfile",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "forwardPorts": [5000],
+    "postCreateCommand": "pip install -r requirements-dev.txt",
+    "remoteUser": "root"
+}

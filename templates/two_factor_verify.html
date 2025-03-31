@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Two-Factor Authentication - Password Manager{% endblock %}
+
+{% block content %}
+<div class="two-factor-container">
+    <h2>Two-Factor Authentication</h2>
+    
+    <p>Please enter the 6-digit code from your authenticator app to verify your identity.</p>
+    
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST" action="{{ url_for('auth.two_factor_verify') }}">
+        {{ form.csrf_token }}
+        
+        <div class="form-group">
+            {{ form.code.label }}
+            {{ form.code(class="form-control", autofocus=true, inputmode="numeric", pattern="[0-9]*") }}
+            {% if form.code.errors %}
+                <div class="error-message">
+                    {% for error in form.code.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn primary">Verify</button>
+        </div>
+    </form>
+    
+    <div class="auth-links">
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </div>
+</div>
+{% endblock %} 

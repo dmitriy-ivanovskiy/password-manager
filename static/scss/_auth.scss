@@ -1,0 +1,199 @@
+/* Authentication styles */
+
+.login-container,
+.create-vault-container,
+.two-factor-container,
+.recovery-container {
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: $spacer * 2.5;
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  position: relative;
+  
+  h2 {
+    margin-bottom: $spacer * 1.5;
+    text-align: center;
+    color: $gray-800;
+    font-size: 2rem;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: $spacer * 2;
+    color: $gray-800;
+    font-size: 2.8rem;
+  }
+  
+  .form-group:last-of-type {
+    margin-bottom: $spacer * 2;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
+      margin-bottom: $spacer;
+      padding: $spacer * 0.75;
+      font-size: 1.1rem;
+    }
+  }
+  
+  .auth-links {
+    margin-top: $spacer * 1.5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: $spacer;
+    
+    a {
+      color: $gray-600;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: $primary-color;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+// Login specific styles
+.login-container {
+  .btn.primary {
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.03em;
+  }
+  
+  .recovery-option {
+    margin-top: $spacer * 2;
+    padding-top: $spacer * 1.5;
+    border-top: 1px solid $gray-200;
+  }
+}
+
+// Reset vault section
+.reset-vault-section {
+  margin-top: $spacer * 3;
+  padding-top: $spacer * 2;
+  border-top: 1px solid $gray-300;
+  
+  .warning-text {
+    margin: $spacer 0 $spacer * 1.5;
+    color: $gray-700;
+    font-size: 0.95rem;
+    
+    &::before {
+      content: "⚠️ ";
+    }
+  }
+  
+  .reset-actions {
+    display: flex;
+    gap: $spacer;
+    margin-top: $spacer * 1.5;
+    
+    @media (max-width: map-get($breakpoints, sm)) {
+      flex-direction: column;
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+  
+  .reset-confirmation {
+    background-color: lighten($danger-color, 42%);
+    border: 1px solid lighten($danger-color, 30%);
+    border-radius: $border-radius;
+    padding: $spacer * 1.5;
+    margin: $spacer 0 $spacer * 1.5;
+    
+    .reset-message {
+      margin-bottom: $spacer;
+      color: darken($danger-color, 15%);
+      font-weight: $font-weight-bold;
+    }
+    
+    .reset-warning {
+      color: $gray-700;
+      margin-bottom: $spacer * 1.5;
+    }
+    
+    .confirm-actions {
+      display: flex;
+      gap: $spacer;
+      
+      @media (max-width: map-get($breakpoints, sm)) {
+        flex-direction: column;
+        
+        .btn {
+          width: 100%;
+        }
+      }
+      
+      .btn.danger {
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+}
+
+// Two-factor specific styles
+.two-factor-container {
+  .qr-code {
+    text-align: center;
+    margin: $spacer * 2 0;
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid $gray-300;
+      padding: $spacer;
+      border-radius: $border-radius;
+    }
+  }
+  
+  .setup-key {
+    font-family: monospace;
+    background-color: $gray-100;
+    padding: $spacer;
+    border-radius: $border-radius;
+    margin-bottom: $spacer * 2;
+    word-break: break-all;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid $gray-300;
+    letter-spacing: 0.05em;
+  }
+  
+  .setup-instructions {
+    margin-bottom: $spacer * 2;
+    font-size: 0.9rem;
+    color: $gray-600;
+    
+    ol {
+      padding-left: $spacer * 1.5;
+      
+      li {
+        margin-bottom: $spacer * 0.5;
+      }
+    }
+  }
+}
+
+// Recovery hint styles
+.recovery-container {
+  .hint-display {
+    background-color: $gray-100;
+    padding: $spacer;
+    border-radius: $border-radius;
+    margin: $spacer * 2 0;
+    font-style: italic;
+    color: $gray-700;
+    border: 1px solid $gray-300;
+  }
+} 

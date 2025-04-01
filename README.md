@@ -2,6 +2,10 @@
 
 A secure, local password manager built with Flask that emphasizes security and ease of use. This application provides secure password storage with strong encryption, password generation, search functionality, and a mobile-friendly interface.
 
+## Live Demo
+
+Check out the live deployment of the application at: https://password-manager-c6vj.onrender.com/
+
 ## Installation
 
 1. Clone the repository:

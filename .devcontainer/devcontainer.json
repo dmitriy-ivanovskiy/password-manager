@@ -1,6 +1,6 @@
 {
     "name": "Password Manager Dev",
-    "dockerFile": "../Dockerfile",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -12,6 +12,6 @@
         }
     },
     "forwardPorts": [5000],
-    "postCreateCommand": "pip install -r requirements-dev.txt",
-    "remoteUser": "root"
+    "postCreateCommand": "pip install -r requirements.txt -r requirements-dev.txt",
+    "remoteUser": "vscode"
 }
